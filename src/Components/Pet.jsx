@@ -74,9 +74,9 @@ function Pet({ pet }) {
         <div className="petCharacteristic">
           <img src={pet.picture} />
         </div>
-        <div className="petCharacteristic">name: {pet.name}</div>
+        <div className="petCharacteristic">Name: {pet.name}</div>
         <div className="petCharacteristic">
-          adoptionStatus: {pet.adoptionStatus}
+          Adoption Status: {pet.adoptionStatus}
         </div>
       </Link>
       <div className="petCharacteristic">

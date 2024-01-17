@@ -65,15 +65,11 @@ option {
 .homePic {
     display: flex;
     justify-content: center;
-    /* Center the image horizontally */
     align-items: center;
-    /* Center the image vertically */
     max-width: 70%;
     height: auto;
-    /* Maintain aspect ratio */
     margin: auto;
     padding: auto;
-    /* Optional: for centering if container has a fixed height */
     border-radius: 100px;
 }
 
@@ -156,7 +152,7 @@ button {
     align-items: center;
 }
 
-*/ a {
+a {
     text-decoration: none;
 }
 
@@ -171,10 +167,10 @@ button {
 }
 
 
-/* .usersDiv {
+.usersDiv {
     display: flex;
     flex-direction: row;
-} */
+}
 
 .petsTable,
 .usersTable {
