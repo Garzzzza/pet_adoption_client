@@ -80,7 +80,7 @@ function Pet({ pet }) {
         </div>
       </Link>
       <div className="petCharacteristic">
-        {token && !savedPetByUser && !adoptedPet && (
+        {token && !savedPetByUser && !adoptedPet && !fosteredPet && (
           <button
             onClick={() => {
               addSavedPet(currentUser.userId, pet.petId);

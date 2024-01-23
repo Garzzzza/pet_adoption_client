@@ -33,6 +33,7 @@ option {
     display: flex;
     flex: 1;
     position: fixed;
+    flex-wrap: wrap;
     background-color: #16181c;
     padding: 0;
     margin: 0;
@@ -59,14 +60,13 @@ option {
     background-color: grey;
     padding: 10px;
     margin: 0;
-
 }
 
 .homePic {
     display: flex;
     justify-content: center;
     align-items: center;
-    max-width: 70%;
+    max-width: 100%;
     height: auto;
     margin: auto;
     padding: auto;
@@ -135,9 +135,6 @@ button {
     border: solid rgb(0, 0, 142);
     border-radius: 10px;
     width: 300px;
-
-
-
 }
 
 .petDiv img {
