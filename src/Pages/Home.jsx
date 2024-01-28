@@ -7,7 +7,6 @@ const Home = () => {
 
   useEffect(() => {
     getSignedUserById();
-    console.log(currentUser);
   }, [showSignInModal]);
 
   return (
