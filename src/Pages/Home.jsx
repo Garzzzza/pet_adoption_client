@@ -2,12 +2,8 @@ import React, { useContext, useEffect } from "react";
 import { SignContext } from "../Context/SignContext";
 
 const Home = () => {
-  const { getSignedUserById, currentUser, showSignInModal } =
+  const { getSignedUserById, currentUser, showSignInModal, token } =
     useContext(SignContext);
-
-  useEffect(() => {
-    getSignedUserById();
-  }, [showSignInModal]);
 
   return (
     <div>

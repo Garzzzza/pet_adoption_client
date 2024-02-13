@@ -27,9 +27,9 @@ function Pet({ pet }) {
     deleteFosteredPet,
   } = useContext(PetUserContext);
 
-  useEffect(() => {
-    getSignedUserById();
-  }, []);
+  // useEffect(() => {
+  //   getSignedUserById();
+  // }, []);
 
   useEffect(() => {
     async function fetchPets() {

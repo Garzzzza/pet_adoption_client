@@ -1,213 +1,249 @@
-import React, { useState, createContext, useContext } from "react"
-import { useNavigate } from 'react-router-dom';
-import axios from "axios"
+import React, { useState, createContext, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const SignContext = createContext();
 
-
 const SignContextProvider = ({ children }) => {
+  const [signUpEmail, setSignUpEmail] = useState("");
+  const [signUpPass, setSignUpPass] = useState("");
+  const [reSignUpPass, setReSignUpPass] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [isAdmin, setIsAdmin] = useState(0);
+  const [signInEmail, setSignInEmail] = useState("");
+  const [signInPass, setSignInPass] = useState("");
+  const [token, setToken] = useState(localStorage.getItem("token") || "");
+  const [currentUser, setCurrentUser] = useState({});
+  const [someUser, setSomeUser] = useState({});
 
+  const [userBio, setUserBio] = useState("");
 
+  const [usersArray, setUsersArray] = useState([]);
 
-    const [signUpEmail, setSignUpEmail] = useState("")
-    const [signUpPass, setSignUpPass] = useState("")
-    const [reSignUpPass, setReSignUpPass] = useState("")
-    const [fullName, setFullName] = useState("")
-    const [phoneNumber, setPhoneNumber] = useState("")
-    const [isAdmin, setIsAdmin] = useState(0)
-    const [signInEmail, setSignInEmail] = useState("")
-    const [signInPass, setSignInPass] = useState("")
-    const [token, setToken] = useState(localStorage.getItem('token') || '');
-    const [currentUser, setCurrentUser] = useState({})
-    const [someUser, setSomeUser] = useState({})
+  const [showSignUpModal, setShowSignUpModal] = useState(false);
+  const [showSignInModal, setShowSignInModal] = useState(false);
 
-    const [userBio, setUserBio] = useState("")
+  const [errorMessage, setErrorMessage] = useState("");
 
-    const [usersArray, setUsersArray] = useState([])
+  const navigate = useNavigate();
 
-    const [showSignUpModal, setShowSignUpModal] = useState(false);
-    const [showSignInModal, setShowSignInModal] = useState(false);
+  function resetSignUpStatesAndUsers() {
+    setFullName("");
+    setSignUpEmail("");
+    setPhoneNumber("");
+    setSignUpPass("");
+    setReSignUpPass("");
+    setSignInEmail("");
+    setSignInPass("");
+    setCurrentUser({});
+    setSomeUser({});
+    setIsAdmin(0);
+  }
 
-    const [errorMessage, setErrorMessage] = useState("")
+  function setRelevantSignUpStates(relevantUser) {
+    setFullName(relevantUser.fullName);
+    setSignUpEmail(relevantUser.signUpEmail);
+    setPhoneNumber(relevantUser.phoneNumber);
+    setSignUpPass(relevantUser.signUpPass);
+    setReSignUpPass(relevantUser.reSignUpPass);
+    setIsAdmin(relevantUser.isAdmin);
+  }
 
-
-    const navigate = useNavigate();
-
-    function resetSignUpStatesAndUsers() {
-        setFullName(""); setSignUpEmail(""); setPhoneNumber(""); setSignUpPass(""); setReSignUpPass(""); setSignInEmail(""); setSignInPass(""); setCurrentUser({}); setSomeUser({});
-        setIsAdmin(0);
+  async function getUsersArray() {
+    try {
+      const response = await axios.get(
+        process.env.REACT_APP_SERVER_URL + "/users",
+        { headers: { Authorization: "Bearer " + token } }
+      );
+      setUsersArray(response.data);
+    } catch (error) {
+      console.log(error);
     }
+  }
 
+  async function handleSignUp(e) {
+    try {
+      e.preventDefault();
+      const newUser = {
+        fullName: fullName,
+        signUpEmail: signUpEmail,
+        phoneNumber: phoneNumber,
+        signUpPass: signUpPass,
+        reSignUpPass: reSignUpPass,
+      };
+      await axios.post(
+        process.env.REACT_APP_SERVER_URL + "/users/signup",
+        newUser
+      );
 
-
-    function setRelevantSignUpStates(relevantUser) {
-        setFullName(relevantUser.fullName);
-        setSignUpEmail(relevantUser.signUpEmail);
-        setPhoneNumber(relevantUser.phoneNumber);
-        setSignUpPass(relevantUser.signUpPass);
-        setReSignUpPass(relevantUser.reSignUpPass);
-        setIsAdmin(relevantUser.isAdmin);
+      resetSignUpStatesAndUsers();
+      setUsersArray();
+      setErrorMessage("");
+      navigate("/");
+      setShowSignInModal(false);
+      setShowSignUpModal(false);
+      getSignedUserById();
+    } catch (error) {
+      console.log(error.response);
+      setErrorMessage(error.response);
     }
+  }
 
-    async function getUsersArray() {
-        try {
-            const response = await axios.get(process.env.REACT_APP_SERVER_URL + "/users",
-                { headers: { Authorization: "Bearer " + token } }
-
-            )
-            setUsersArray(response.data)
-        }
-        catch (error) {
-            console.log(error)
-        }
+  const handleSignIn = async () => {
+    try {
+      const result = await axios.post(
+        process.env.REACT_APP_SERVER_URL + "/users/login",
+        { signInEmail: signInEmail, signInPass: signInPass }
+      );
+      setToken(result.data.token);
+      localStorage.setItem("token", result.data.token);
+      resetSignUpStatesAndUsers();
+      setErrorMessage("");
+      navigate("/");
+      setShowSignInModal(false);
+      setShowSignUpModal(false);
+    } catch (error) {
+      console.log(error.response);
+      setErrorMessage(error.response);
     }
+  };
 
-    async function handleSignUp(e) {
-        try {
-            e.preventDefault();
-            const newUser = {
-                fullName: fullName,
-                signUpEmail: signUpEmail,
-                phoneNumber: phoneNumber,
-                signUpPass: signUpPass,
-                reSignUpPass: reSignUpPass,
-            };
-            await axios.post(process.env.REACT_APP_SERVER_URL + '/users/signup', newUser);
+  async function getSignedUserById() {
+    try {
+      const res = await axios.get(
+        process.env.REACT_APP_SERVER_URL + "/users/profile",
+        { headers: { Authorization: "Bearer " + token } }
+      );
 
-            resetSignUpStatesAndUsers();
-            setUsersArray();
-            setErrorMessage("");
-            navigate("/")
-            setShowSignInModal(false)
-            setShowSignUpModal(false)
-            getSignedUserById()
-
-        }
-        catch (error) {
-            console.log(error.response)
-            setErrorMessage(error.response)
-        }
-    };
-
-
-
-    const handleSignIn = async () => {
-        try {
-            const result = await axios.post(process.env.REACT_APP_SERVER_URL + '/users/login',
-                { signInEmail: signInEmail, signInPass: signInPass }
-            )
-            setToken(result.data.token)
-            localStorage.setItem("token", result.data.token)
-            resetSignUpStatesAndUsers(); setErrorMessage("");
-            navigate("/")
-            setShowSignInModal(false)
-            setShowSignUpModal(false)
-            getSignedUserById()
-
-        }
-        catch (error) {
-            console.log(error.response)
-            setErrorMessage(error.response)
-        }
+      setCurrentUser(res.data);
+    } catch (err) {
+      if (err.response && err.response.data === "Invalid token") {
+        handleLogOut();
+        return;
+      }
+      console.log(err);
     }
+  }
 
-    async function getSignedUserById() {
-        try {
-            const res = await axios.get(process.env.REACT_APP_SERVER_URL + "/users/profile",
-                { headers: { Authorization: "Bearer " + token } }
-            );
+  async function getSomeUserById(userId) {
+    try {
+      const res = await axios.get(
+        process.env.REACT_APP_SERVER_URL + "/users/" + userId,
+        { headers: { Authorization: "Bearer " + token } }
+      );
 
-            setCurrentUser(res.data);
-
-        } catch (err) {
-            console.log(err);
-        }
+      setSomeUser(res.data);
+    } catch (err) {
+      console.log(err);
     }
+  }
 
-    async function getSomeUserById(userId) {
-        try {
-            const res = await axios.get(process.env.REACT_APP_SERVER_URL + "/users/" + userId,
-                { headers: { Authorization: "Bearer " + token } }
-            );
+  const handleUserUpdate = async () => {
+    try {
+      const updatedUser = {
+        userId: currentUser.userId,
+        fullName: fullName,
+        signUpEmail: signUpEmail,
+        phoneNumber: phoneNumber,
+        signUpPass: signUpPass,
+      };
 
-            setSomeUser(res.data);
-
-        } catch (err) {
-            console.log(err);
+      await axios.put(
+        process.env.REACT_APP_SERVER_URL + "/users/update",
+        updatedUser,
+        {
+          headers: { Authorization: "Bearer " + token },
         }
+      );
+
+      getSignedUserById(); // To refresh the user info
+      resetSignUpStatesAndUsers();
+    } catch (err) {
+      console.log(err);
     }
+  };
 
-    const handleUserUpdate = async () => {
-        try {
-            const updatedUser = {
-                userId: currentUser.userId,
-                fullName: fullName,
-                signUpEmail: signUpEmail,
-                phoneNumber: phoneNumber,
-                signUpPass: signUpPass,
-            };
+  const toggleAdmin = async (relevantUser) => {
+    try {
+      const updatedUser = {
+        userId: relevantUser.userId,
+        isAdmin: !relevantUser.isAdmin,
+      };
 
-            await axios.put(process.env.REACT_APP_SERVER_URL + "/users/update", updatedUser, {
-                headers: { Authorization: "Bearer " + token },
-            });
-
-            getSignedUserById(); // To refresh the user info
-            resetSignUpStatesAndUsers();
-        } catch (err) {
-            console.log(err);
+      await axios.put(
+        process.env.REACT_APP_SERVER_URL + "/users/toggleadmin",
+        updatedUser,
+        {
+          headers: { Authorization: "Bearer " + token },
         }
-    };
+      );
 
-
-    const toggleAdmin = async (relevantUser) => {
-        try {
-            const updatedUser = {
-                userId: relevantUser.userId,
-                isAdmin: !relevantUser.isAdmin
-            };
-
-            await axios.put(process.env.REACT_APP_SERVER_URL + "/users/toggleadmin", updatedUser, {
-                headers: { Authorization: "Bearer " + token },
-            });
-
-            resetSignUpStatesAndUsers();
-            getSomeUserById(relevantUser.userId)
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
-
-
-
-    const handleLogOut = async () => {
-        navigate("/");
-
-        setToken("");
-        localStorage.clear();
-        setCurrentUser({});
+      resetSignUpStatesAndUsers();
+      getSomeUserById(relevantUser.userId);
+    } catch (err) {
+      console.log(err);
     }
+  };
 
-    return (
-        < SignContext.Provider
-            value={{
-                signUpEmail, setSignUpEmail, signUpPass, setSignUpPass, reSignUpPass, setReSignUpPass, fullName, setFullName, phoneNumber, setPhoneNumber, handleSignUp, resetSignUpStatesAndUsers,
-                setRelevantSignUpStates,
-                signInEmail, setSignInEmail, signInPass, setSignInPass, handleSignIn, token, setToken,
-                userBio, setUserBio,
-                usersArray, setUsersArray, getUsersArray,
-                getSignedUserById, currentUser, setCurrentUser, handleUserUpdate,
-                getSomeUserById, someUser, setSomeUser
-                , showSignUpModal, setShowSignUpModal, showSignInModal, setShowSignInModal,
-                errorMessage, setErrorMessage,
-                isAdmin, setIsAdmin, toggleAdmin,
-                handleLogOut,
-            }}
-        >
-            {children}
+  const handleLogOut = async () => {
+    navigate("/");
 
-        </SignContext.Provider>
-    )
-}
-export default SignContextProvider
-export { SignContext }
+    setToken("");
+    localStorage.clear();
+    setCurrentUser({});
+  };
+
+  return (
+    <SignContext.Provider
+      value={{
+        signUpEmail,
+        setSignUpEmail,
+        signUpPass,
+        setSignUpPass,
+        reSignUpPass,
+        setReSignUpPass,
+        fullName,
+        setFullName,
+        phoneNumber,
+        setPhoneNumber,
+        handleSignUp,
+        resetSignUpStatesAndUsers,
+        setRelevantSignUpStates,
+        signInEmail,
+        setSignInEmail,
+        signInPass,
+        setSignInPass,
+        handleSignIn,
+        token,
+        setToken,
+        userBio,
+        setUserBio,
+        usersArray,
+        setUsersArray,
+        getUsersArray,
+        getSignedUserById,
+        currentUser,
+        setCurrentUser,
+        handleUserUpdate,
+        getSomeUserById,
+        someUser,
+        setSomeUser,
+        showSignUpModal,
+        setShowSignUpModal,
+        showSignInModal,
+        setShowSignInModal,
+        errorMessage,
+        setErrorMessage,
+        isAdmin,
+        setIsAdmin,
+        toggleAdmin,
+        handleLogOut,
+      }}
+    >
+      {children}
+    </SignContext.Provider>
+  );
+};
+export default SignContextProvider;
+export { SignContext };

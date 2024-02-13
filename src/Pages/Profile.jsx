@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { SignContext } from "../Context/SignContext";
 
 const Profile = () => {
@@ -21,10 +21,6 @@ const Profile = () => {
     setUserBio,
   } = useContext(SignContext);
 
-  useEffect(() => {
-    getSignedUserById();
-  }, []);
-
   return (
     <div>
       <div className="formDiv">
@@ -41,10 +37,9 @@ const Profile = () => {
       </div>
 
       <div className="formDiv">
-        <div required className="formInputTitle">
-          Email
-        </div>
+        <div className="formInputTitle">Email</div>
         <input
+          required
           placeholder={currentUser.signUpEmail}
           type="text"
           value={signUpEmail}
@@ -55,9 +50,7 @@ const Profile = () => {
       </div>
 
       <div className="formDiv">
-        <div required className="formInputTitle">
-          Phone Number
-        </div>
+        <div className="formInputTitle">Phone Number</div>
         <input
           placeholder={currentUser.phoneNumber}
           type="number"
@@ -68,9 +61,10 @@ const Profile = () => {
         ></input>
       </div>
 
-      <div required className="formDiv">
+      <div className="formDiv">
         <div className="formInputTitle">Password</div>
         <input
+          required
           type="password"
           value={signUpPass}
           onChange={(e) => {

@@ -28,9 +28,9 @@ const MyPets = () => {
     renderFosteredPetsForUser,
   } = useContext(PetUserContext);
 
-  useEffect(() => {
-    getSignedUserById();
-  }, []);
+  // useEffect(() => {
+  //   getSignedUserById();
+  // }, []);
   useEffect(() => {
     async function fetchPets() {
       await getSavedPetsArray();

@@ -1,123 +1,96 @@
-import './App.css';
-import React, { useState, useEffect } from "react";
-import { Routes, Route } from 'react-router-dom';
+import "./App.css";
+import React, { useState, useEffect, useContext } from "react";
+import { Routes, Route } from "react-router-dom";
 import NavBar from "./Components/NavBar";
 import Home from "./Pages/Home";
 import Search from "./Pages/Search";
-import AdvancedSearch from './Pages/AdvancedSearch';
-import PetsList from './Pages/PetsList';
+import AdvancedSearch from "./Pages/AdvancedSearch";
+import PetsList from "./Pages/PetsList";
 import axios from "axios";
-import PetContextProvider from "./Context/PetContext.jsx";
-import SignContextProvider from "./Context/SignContext";
-import PetUserContextProvider from './Context/PetUserContext';
-import SpecificPetForAdmin from "./Pages/SpecificPetForAdmin"
-import SpecificUserForAdmin from './Pages/SpecificUserForAdmin';
+
+import SpecificPetForAdmin from "./Pages/SpecificPetForAdmin";
+import SpecificUserForAdmin from "./Pages/SpecificUserForAdmin";
 import { SpecificPet } from "./Pages/SpecificPet";
-import { Admin } from "./Pages/Admin"
-import PrivateRoute from "./Components/PrivateRoute"
-import MyPets from './Pages/MyPets';
-import Profile from "./Pages/Profile"
+import { Admin } from "./Pages/Admin";
+import PrivateRoute from "./Components/PrivateRoute";
+import MyPets from "./Pages/MyPets";
+import Profile from "./Pages/Profile";
+import { SignContext } from "./Context/SignContext";
 
 function App() {
+  const { token, getSignedUserById } = useContext(SignContext);
 
-
-
-
-
+  useEffect(() => {
+    if (token.length > 0) {
+      getSignedUserById();
+    }
+  }, [token]);
 
   return (
-    <SignContextProvider>
+    <div className="App">
+      <NavBar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/search" element={<Search />} />
 
-      <PetContextProvider>
+        <Route path="/advancedsearch" element={<AdvancedSearch />} />
 
-        <PetUserContextProvider>
+        <Route
+          path="/pets"
+          element={
+            <PrivateRoute>
+              <PetsList />
+            </PrivateRoute>
+          }
+        />
 
+        <Route
+          path="/mypets"
+          element={
+            <PrivateRoute>
+              <MyPets />
+            </PrivateRoute>
+          }
+        />
 
-          <div className="App">
-            <NavBar />
-            <Routes>
+        <Route path="/pets/:petId" element={<SpecificPet />} />
+        <Route
+          path="/Admin"
+          element={
+            <PrivateRoute>
+              <Admin />
+            </PrivateRoute>
+          }
+        />
 
-              <Route
-                path="/" element={<Home
-                />}
-              />
-              <Route
-                path="/search" element={<Search
-                />}
-              />
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute>
+              <Profile />
+            </PrivateRoute>
+          }
+        />
 
-              <Route
-                path="/advancedsearch" element={<AdvancedSearch />}
-              />
+        <Route
+          path="/pets/petsforadmin/:petId"
+          element={
+            <PrivateRoute>
+              <SpecificPetForAdmin />
+            </PrivateRoute>
+          }
+        />
 
-              <Route path="/pets" element={
-                <PrivateRoute>
-                  <PetsList />
-                </PrivateRoute>
-              } />
-
-              <Route
-                path="/mypets" element={
-                  <PrivateRoute>
-
-                    <MyPets />
-                  </PrivateRoute>
-                }
-              />
-
-              <Route
-                path="/pets/:petId" element={
-
-                  <SpecificPet />
-                }
-              />
-              <Route
-                path="/Admin" element={
-                  <PrivateRoute>
-
-                    <Admin />
-                  </PrivateRoute>
-                }
-              />
-
-              <Route
-                path="/profile" element={
-                  <PrivateRoute>
-
-                    <Profile />
-                  </PrivateRoute>
-                }
-
-              />
-
-              <Route
-                path="/pets/petsforadmin/:petId" element={
-                  <PrivateRoute>
-
-                    <SpecificPetForAdmin />
-                  </PrivateRoute>
-
-                }
-              />
-
-              <Route
-                path="/users/userforadmin/:userId" element={
-                  <PrivateRoute>
-
-                    <SpecificUserForAdmin />
-                  </PrivateRoute>
-                }
-              />
-
-            </Routes>
-
-          </div>
-        </PetUserContextProvider>
-
-      </PetContextProvider >
-    </SignContextProvider>
-
-
+        <Route
+          path="/users/userforadmin/:userId"
+          element={
+            <PrivateRoute>
+              <SpecificUserForAdmin />
+            </PrivateRoute>
+          }
+        />
+      </Routes>
+    </div>
   );
 }
 
