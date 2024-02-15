@@ -18,7 +18,6 @@ const Home = () => {
           )}
         </div>
 
-        <h2>In this site you can adopt pets.</h2>
         <div className="sitePic">
           <img
             className="sitePic"
