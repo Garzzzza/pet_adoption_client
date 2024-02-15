@@ -9,6 +9,7 @@ const SignContextProvider = ({ children }) => {
   const [signUpPass, setSignUpPass] = useState("");
   const [reSignUpPass, setReSignUpPass] = useState("");
   const [fullName, setFullName] = useState("");
+  const [picture, setPicture] = useState(null);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isAdmin, setIsAdmin] = useState(0);
   const [signInEmail, setSignInEmail] = useState("");
@@ -31,6 +32,7 @@ const SignContextProvider = ({ children }) => {
   function resetSignUpStatesAndUsers() {
     setFullName("");
     setSignUpEmail("");
+    setPicture(null);
     setPhoneNumber("");
     setSignUpPass("");
     setReSignUpPass("");
@@ -65,16 +67,15 @@ const SignContextProvider = ({ children }) => {
   async function handleSignUp(e) {
     try {
       e.preventDefault();
-      const newUser = {
-        fullName: fullName,
-        signUpEmail: signUpEmail,
-        phoneNumber: phoneNumber,
-        signUpPass: signUpPass,
-        reSignUpPass: reSignUpPass,
-      };
+      const userData = new FormData();
+      userData.append("fullName", fullName.toLowerCase());
+      userData.append("signUpEmail", signUpEmail.toLowerCase());
+      userData.append("picture", picture);
+      userData.append("signUpPass", signUpPass);
+      userData.append("reSignUpPass", reSignUpPass);
       await axios.post(
         process.env.REACT_APP_SERVER_URL + "/users/signup",
-        newUser
+        userData
       );
 
       resetSignUpStatesAndUsers();
@@ -83,7 +84,6 @@ const SignContextProvider = ({ children }) => {
       navigate("/");
       setShowSignInModal(false);
       setShowSignUpModal(false);
-      getSignedUserById();
     } catch (error) {
       console.log(error.response);
       setErrorMessage(error.response);
@@ -188,10 +188,9 @@ const SignContextProvider = ({ children }) => {
 
   const handleLogOut = async () => {
     navigate("/");
-
+    resetSignUpStatesAndUsers();
     setToken("");
     localStorage.clear();
-    setCurrentUser({});
   };
 
   return (
@@ -205,6 +204,8 @@ const SignContextProvider = ({ children }) => {
         setReSignUpPass,
         fullName,
         setFullName,
+        picture,
+        setPicture,
         phoneNumber,
         setPhoneNumber,
         handleSignUp,

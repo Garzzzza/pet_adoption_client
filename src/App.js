@@ -18,7 +18,16 @@ import Profile from "./Pages/Profile";
 import { SignContext } from "./Context/SignContext";
 
 function App() {
-  const { token, getSignedUserById } = useContext(SignContext);
+  const {
+    token,
+    getSignedUserById,
+    setFullName,
+    setSignUpEmail,
+    setPhoneNumber,
+    setUserBio,
+    currentUser,
+    setCurrentUser,
+  } = useContext(SignContext);
 
   useEffect(() => {
     if (token.length > 0) {

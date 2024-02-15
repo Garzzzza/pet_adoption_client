@@ -89,7 +89,7 @@ function SpecificPet({ pet }) {
       <div className="petCharacteristic">type: {theSpecificPet.type}</div>
       <div className="petCharacteristic">name: {theSpecificPet.name}</div>
       <div className="petCharacteristic">
-        adoptionStatus: {theSpecificPet.adoptionStatus},
+        adoptionStatus: {theSpecificPet.adoptionStatus}
       </div>
 
       <div className="petCharacteristic">height: {theSpecificPet.height}</div>
