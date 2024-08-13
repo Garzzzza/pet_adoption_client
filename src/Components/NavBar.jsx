@@ -10,7 +10,6 @@ const NavBar = () => {
   const {
     handleLogOut,
     token,
-    getSignedUserById,
     currentUser,
     showSignUpModal,
     setShowSignUpModal,
@@ -73,7 +72,7 @@ const NavBar = () => {
       <Link className={getClassName("/search")} to="/search">
         Search
       </Link>
-      {token && currentUser.isAdmin === 1 && (
+      {token && currentUser.isAdmin === true && (
         <Link className={getClassName("/admin")} to="/admin">
           Admin
         </Link>

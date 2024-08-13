@@ -5,18 +5,15 @@ const Profile = () => {
   const {
     setSignUpEmail,
     signUpEmail,
-    signUpPass,
-    setSignUpPass,
+
     fullName,
     setFullName,
-    phoneNumber,
-    setPhoneNumber,
-    handleSignUp,
-    reSignUpPass,
-    setReSignUpPass,
+
+    picture,
+    setPicture,
+
     handleUserUpdate,
     currentUser,
-    getSignedUserById,
     userBio,
     setUserBio,
   } = useContext(SignContext);
@@ -24,8 +21,9 @@ const Profile = () => {
   useEffect(() => {
     setFullName(currentUser.fullName);
     setSignUpEmail(currentUser.signUpEmail);
-    setPhoneNumber(currentUser.phoneNumber);
+
     setUserBio(currentUser.userBio);
+    setPicture(currentUser.picture);
   }, [currentUser]);
 
   return (
@@ -54,18 +52,7 @@ const Profile = () => {
         ></input>
       </div>
 
-      <div className="formDiv">
-        <div className="formInputTitle">Phone Number</div>
-        <input
-          type="number"
-          value={phoneNumber}
-          onChange={(e) => {
-            setPhoneNumber(e.target.value);
-          }}
-        ></input>
-      </div>
-
-      <div className="formDiv">
+      {/* <div className="formDiv">
         <div className="formInputTitle">Password</div>
         <input
           required
@@ -76,6 +63,18 @@ const Profile = () => {
             setReSignUpPass(e.target.value);
           }}
         ></input>
+      </div> */}
+
+      <div className="formDiv">
+        <div className="formInputTitle">Picture</div>
+        <div className="profilePic">
+          {currentUser.picture && <img src={currentUser.picture} />}
+          <input
+            required
+            type="file"
+            onChange={(e) => setPicture(e.target.files[0])}
+          ></input>
+        </div>
       </div>
 
       <div className="formDiv">
@@ -92,10 +91,8 @@ const Profile = () => {
       <div>
         <button
           className="formButton"
-          disabled={!signUpEmail || !signUpPass || !fullName || !phoneNumber}
-          onClick={() => {
-            handleUserUpdate();
-          }}
+          disabled={!signUpEmail || !fullName}
+          onClick={handleUserUpdate}
         >
           Save
         </button>

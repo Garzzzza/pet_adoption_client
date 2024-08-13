@@ -10,7 +10,6 @@ const SignContextProvider = ({ children }) => {
   const [reSignUpPass, setReSignUpPass] = useState("");
   const [fullName, setFullName] = useState("");
   const [picture, setPicture] = useState(null);
-  const [phoneNumber, setPhoneNumber] = useState("");
   const [isAdmin, setIsAdmin] = useState(0);
   const [signInEmail, setSignInEmail] = useState("");
   const [signInPass, setSignInPass] = useState("");
@@ -33,7 +32,6 @@ const SignContextProvider = ({ children }) => {
     setFullName("");
     setSignUpEmail("");
     setPicture(null);
-    setPhoneNumber("");
     setSignUpPass("");
     setReSignUpPass("");
     setSignInEmail("");
@@ -46,7 +44,6 @@ const SignContextProvider = ({ children }) => {
   function setRelevantSignUpStates(relevantUser) {
     setFullName(relevantUser.fullName);
     setSignUpEmail(relevantUser.signUpEmail);
-    setPhoneNumber(relevantUser.phoneNumber);
     setSignUpPass(relevantUser.signUpPass);
     setReSignUpPass(relevantUser.reSignUpPass);
     setIsAdmin(relevantUser.isAdmin);
@@ -139,16 +136,16 @@ const SignContextProvider = ({ children }) => {
     }
   }
 
-  const handleUserUpdate = async () => {
-    try {
-      const updatedUser = {
-        userId: currentUser.userId,
-        fullName: fullName,
-        signUpEmail: signUpEmail,
-        phoneNumber: phoneNumber,
-        signUpPass: signUpPass,
-      };
+  // working on this one
 
+  const handleUserUpdate = async (e) => {
+    try {
+      e.preventDefault();
+      const updatedUser = new FormData();
+      updatedUser.append("fullName", fullName.toLowerCase());
+      updatedUser.append("signUpEmail", signUpEmail.toLowerCase());
+      updatedUser.append("picture", picture);
+      console.log(updatedUser);
       await axios.put(
         process.env.REACT_APP_SERVER_URL + "/users/update",
         updatedUser,
@@ -159,6 +156,7 @@ const SignContextProvider = ({ children }) => {
 
       getSignedUserById(); // To refresh the user info
       resetSignUpStatesAndUsers();
+      navigate("/");
     } catch (err) {
       console.log(err);
     }
@@ -206,8 +204,7 @@ const SignContextProvider = ({ children }) => {
         setFullName,
         picture,
         setPicture,
-        phoneNumber,
-        setPhoneNumber,
+
         handleSignUp,
         resetSignUpStatesAndUsers,
         setRelevantSignUpStates,

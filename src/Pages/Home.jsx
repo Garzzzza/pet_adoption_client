@@ -2,20 +2,15 @@ import React, { useContext, useEffect } from "react";
 import { SignContext } from "../Context/SignContext";
 
 const Home = () => {
-  const { getSignedUserById, currentUser, showSignInModal, token } =
-    useContext(SignContext);
+  const { currentUser, showSignInModal, token } = useContext(SignContext);
 
   return (
     <div>
       <div className="welcome">
         <div className="welcomeUser">
-          <h1>Welcome To The Pet Adoption Agency {currentUser.fullName}</h1>
-
-          {currentUser.picture && (
-            <div className="profilePic">
-              <img src={currentUser.picture} />
-            </div>
-          )}
+          <div>
+            <h1>Welcome To The Pet Adoption Agency {currentUser.fullName}</h1>
+          </div>
         </div>
 
         <div className="sitePic">

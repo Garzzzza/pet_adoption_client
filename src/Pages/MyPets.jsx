@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 
 const MyPets = () => {
   const { petsArray, setPetsArray, getPetsArray } = useContext(PetContext);
-  const { currentUser, getSignedUserById } = useContext(SignContext);
+  const { currentUser } = useContext(SignContext);
 
   const {
     savedPetsArray,
@@ -28,9 +28,6 @@ const MyPets = () => {
     renderFosteredPetsForUser,
   } = useContext(PetUserContext);
 
-  // useEffect(() => {
-  //   getSignedUserById();
-  // }, []);
   useEffect(() => {
     async function fetchPets() {
       await getSavedPetsArray();
@@ -43,6 +40,9 @@ const MyPets = () => {
   return (
     <div>
       <div>
+        <div className="profilePic">
+          {currentUser.picture && <img src={currentUser.picture} />}
+        </div>
         <h1>My Saved Pets</h1>
         {!savedPetsArray.length && <div>You haven't saved any pets</div>}
         <div className="petsDiv">
@@ -52,7 +52,7 @@ const MyPets = () => {
 
       <div>
         <h1>My Fostered Pets</h1>
-        {!fosteredPetsArray.length && <div>You haven't adopted any pets</div>}
+        {!fosteredPetsArray.length && <div>You haven't fostered any pets</div>}
         <div className="petsDiv">
           {fosteredPetsArray.length > 0 &&
             renderFosteredPetsForUser(currentUser)}

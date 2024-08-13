@@ -9,8 +9,7 @@ const SignUp = () => {
     setSignUpPass,
     fullName,
     setFullName,
-    phoneNumber,
-    setPhoneNumber,
+
     handleSignUp,
     reSignUpPass,
     setReSignUpPass,
@@ -51,17 +50,6 @@ const SignUp = () => {
           required
           type="file"
           onChange={(e) => setPicture(e.target.files[0])}
-        ></input>
-      </div>
-
-      <div className="formDiv">
-        <div className="formInputTitle">Phone Number</div>
-        <input
-          type="number"
-          value={phoneNumber}
-          onChange={(e) => {
-            setPhoneNumber(e.target.value);
-          }}
         ></input>
       </div>
 

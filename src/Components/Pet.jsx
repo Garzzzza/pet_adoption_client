@@ -6,7 +6,7 @@ import { PetUserContext } from "../Context/PetUserContext";
 import { SpecificPet } from "../Pages/SpecificPet";
 
 function Pet({ pet }) {
-  const { currentUser, getSignedUserById, token } = useContext(SignContext);
+  const { currentUser, token } = useContext(SignContext);
   const { handlePetUpdate, getPetById, theSpecificPet } =
     useContext(PetContext);
   const {
@@ -26,10 +26,6 @@ function Pet({ pet }) {
     getFosteredPetsArray,
     deleteFosteredPet,
   } = useContext(PetUserContext);
-
-  // useEffect(() => {
-  //   getSignedUserById();
-  // }, []);
 
   useEffect(() => {
     async function fetchPets() {

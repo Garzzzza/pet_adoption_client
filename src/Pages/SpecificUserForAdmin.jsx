@@ -47,11 +47,6 @@ const SpecificUserForAdmin = () => {
       </div>
 
       <div className="specificUserForAdminCharacteristicDiv">
-        <div className="">Phone Number:</div>
-        <div>{someUser.phoneNumber}</div>
-      </div>
-
-      <div className="specificUserForAdminCharacteristicDiv">
         <div className="">Admin :</div>
         <div>{someUser.isAdmin ? "Yes" : "No"}</div>
       </div>

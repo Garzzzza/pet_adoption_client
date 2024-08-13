@@ -8,22 +8,8 @@ const UserForDashBoard = ({ user }) => {
     getSomeUserById,
     currentUser,
     someUser,
-    setSomeUser,
-    fullName,
-    setFullName,
-    signUpEmail,
-    setSignUpEmail,
-    phoneNumber,
-    setPhoneNumber,
-    signUpPass,
-    setSignUpPass,
-    reSignUpPass,
-    setReSignUpPass,
-    isAdmin,
-    setIsAdmin,
+
     toggleAdmin,
-    handleUserUpdate,
-    setRelevantSignUpStates,
   } = useContext(SignContext);
 
   const navigate = useNavigate();
@@ -37,7 +23,6 @@ const UserForDashBoard = ({ user }) => {
       <td onClick={handleRowClick}>{user.userId}</td>
       <td onClick={handleRowClick}>{user.fullName}</td>
       <td onClick={handleRowClick}>{user.signUpEmail}</td>
-      <td onClick={handleRowClick}>{user.phoneNumber}</td>
       <td>
         <button
           onClick={() => {
